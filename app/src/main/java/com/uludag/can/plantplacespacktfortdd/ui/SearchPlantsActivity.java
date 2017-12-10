@@ -11,6 +11,9 @@ import com.uludag.can.plantplacespacktfortdd.dto.PlantDTO;
 import com.uludag.can.plantplacespacktfortdd.service.IPlantService;
 import com.uludag.can.plantplacespacktfortdd.service.PlantService;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.List;
 
 public class SearchPlantsActivity extends AppCompatActivity {
@@ -28,7 +31,7 @@ public class SearchPlantsActivity extends AppCompatActivity {
         mPlantService = new PlantService();
     }
 
-    public void searchPlants(View view) {
+    public void searchPlants(View view) throws IOException, JSONException {
 
         List<PlantDTO> plants = mPlantService.fetchPlants(actPlantName.getText().toString());
 

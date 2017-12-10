@@ -4,12 +4,14 @@ import com.uludag.can.plantplacespacktfortdd.dao.IPlantDAO;
 import com.uludag.can.plantplacespacktfortdd.dao.PlantDAOStub;
 import com.uludag.can.plantplacespacktfortdd.dto.PlantDTO;
 
+import org.json.JSONException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.List;
 
 import static junit.framework.Assert.assertTrue;
@@ -31,7 +33,7 @@ public class TestPlantDAO {
     }
 
     @Test
-    public void testPlantDAO_searchForRedbudShouldReturnAtLeastOneResult() {
+    public void testPlantDAO_searchForRedbudShouldReturnAtLeastOneResult() throws IOException, JSONException {
 
         // Assume we do not have a match at first
         boolean redbudFound = false;
@@ -51,7 +53,7 @@ public class TestPlantDAO {
     }
 
     @Test
-    public void testPlantDAO_searchForOakShouldReturnAtLeastOneWhiteOak() {
+    public void testPlantDAO_searchForOakShouldReturnAtLeastOneWhiteOak() throws IOException, JSONException {
 
         // Assume we do not have a match at first
         boolean whiteOakFound = false;
@@ -70,7 +72,7 @@ public class TestPlantDAO {
 
     }
 
-    public void testPlantDAO_searchForEShouldReturnAtLeastTwoResults() {
+    public void testPlantDAO_searchForEShouldReturnAtLeastTwoResults() throws IOException, JSONException {
         List<PlantDTO> plants = mPlantDAO.fetchPlants("e");
         int size = plants.size();
         boolean atLeastTwo = size > 2;
