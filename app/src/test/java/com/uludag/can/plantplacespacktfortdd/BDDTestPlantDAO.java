@@ -10,8 +10,11 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
 
 public class BDDTestPlantDAO {
 
@@ -43,6 +46,7 @@ public class BDDTestPlantDAO {
         for (PlantDTO plant : plants) {
             if (plant.getGenus().contains("Cercis") && plant.getSpecies().contains("canadensis")) {
                 redbudFound = true;
+                break;
             }
         }
 
@@ -113,8 +117,10 @@ public class BDDTestPlantDAO {
 
     private void thenVerifyNoResults() {
 
-        int size = plants.size();
-        assertEquals(0, size);
+        /*int size = plants.size();
+        assertEquals(0, size);*/
+        // We can use Hamcrest with one line instead of two lines at above
+        assertThat(plants, empty());
 
     }
 
@@ -130,7 +136,9 @@ public class BDDTestPlantDAO {
     private void thenVerifyAllGenusAreQuercus() {
 
         for (PlantDTO plant : plants) {
-            assertEquals("Quercus", plant.getGenus());
+            //assertEquals("Quercus", plant.getGenus());
+            // We can eliminate that use Hamcrest instead
+            assertThat(plant, hasProperty("genus", containsString("Quercus")));
         }
 
     }
