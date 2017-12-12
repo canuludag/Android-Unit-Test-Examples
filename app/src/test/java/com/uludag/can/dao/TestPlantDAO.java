@@ -1,4 +1,4 @@
-package com.uludag.can.plantplacespacktfortdd;
+package com.uludag.can.dao;
 
 import com.uludag.can.plantplacespacktfortdd.dao.IPlantDAO;
 import com.uludag.can.plantplacespacktfortdd.dao.PlantDAOStub;
