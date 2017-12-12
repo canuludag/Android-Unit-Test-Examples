@@ -18,6 +18,15 @@ public class PlantDAO implements IPlantDAO {
         mNetworkDAO = new NetworkDAO();
     }
 
+    public NetworkDAO getNetworkDAO() {
+        return mNetworkDAO;
+    }
+
+    @Override
+    public void setNetworkDAO(NetworkDAO networkDAO) {
+        mNetworkDAO = networkDAO;
+    }
+
     @Override
     public List<PlantDTO> fetchPlants(String filter) throws IOException, JSONException {
 

@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface IPlantDAO {
 
+    void setNetworkDAO(NetworkDAO networkDAO);
+
     /**
      * Accept filter text, and return a collection of plants that contain that filter
      *

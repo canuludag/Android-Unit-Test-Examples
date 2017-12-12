@@ -1,8 +1,10 @@
 package com.uludag.can.plantplacespacktfortdd;
 
 import com.uludag.can.plantplacespacktfortdd.dao.IPlantDAO;
+import com.uludag.can.plantplacespacktfortdd.dao.NetworkDAO;
 import com.uludag.can.plantplacespacktfortdd.dao.PlantDAO;
 import com.uludag.can.plantplacespacktfortdd.dto.PlantDTO;
+import com.uludag.can.plantplacespacktfortdd.utils.FakeRequestResponses;
 
 import org.json.JSONException;
 import org.junit.Test;
@@ -15,11 +17,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.mockito.Mockito.*;
 
 public class BDDTestPlantDAO {
 
     private IPlantDAO mPlantDAO;
     private List<PlantDTO> plants;
+
+    private String redbudJsonResponse = FakeRequestResponses.redbudJsonResponse;
+    private String quercusJsonResponse = FakeRequestResponses.quercusJsonResponse;
+    private String gibberishJsonResponse = FakeRequestResponses.gibberishJsonResponse;
 
     @Test
     public void testPlantDAO_fetchShouldReturnResultsForRedbud() throws IOException, JSONException {
@@ -30,8 +37,18 @@ public class BDDTestPlantDAO {
 
     }
 
-    private void givenPlantDAOIsInitialized() {
+    private void givenPlantDAOIsInitialized() throws IOException {
         mPlantDAO = new PlantDAO();
+
+        // Here is where we mock our NetworkDAO
+        NetworkDAO networkDAO = mock(NetworkDAO.class);
+
+        String baseUrl = "http://plantplaces.com/perl/mobile/viewplantsjson.pl?Combined_Name=";
+        when(networkDAO.fetch(baseUrl + "skfksdjfnkdsjfksdjfnksd")).thenReturn(gibberishJsonResponse);
+        when(networkDAO.fetch(baseUrl + "Quercus")).thenReturn(quercusJsonResponse);
+        when(networkDAO.fetch(baseUrl + "Redbud")).thenReturn(redbudJsonResponse);
+
+        mPlantDAO.setNetworkDAO(networkDAO);
     }
 
     private void whenSearchForRedbud() throws IOException, JSONException {
