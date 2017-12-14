@@ -1,7 +1,7 @@
 package com.uludag.can.plantplacespacktfortdd.service;
 
 import com.uludag.can.plantplacespacktfortdd.dao.IPlantDAO;
-import com.uludag.can.plantplacespacktfortdd.dao.PlantDAOStub;
+import com.uludag.can.plantplacespacktfortdd.dao.PlantDAO;
 import com.uludag.can.plantplacespacktfortdd.dto.PlantDTO;
 
 import org.json.JSONException;
@@ -14,7 +14,7 @@ public class PlantService implements IPlantService {
     IPlantDAO mPlantDAO;
 
     public PlantService() {
-        mPlantDAO = new PlantDAOStub();
+        mPlantDAO = new PlantDAO();
     }
 
     @Override

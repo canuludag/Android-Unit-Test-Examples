@@ -1,9 +1,14 @@
 package com.uludag.can.plantplacespacktfortdd.ui;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.uludag.can.plantplacespacktfortdd.R;
@@ -16,10 +21,14 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.List;
 
-public class SearchPlantsActivity extends AppCompatActivity {
+public class SearchPlantsActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private IPlantService mPlantService;
+    private static IPlantService mPlantService;
     private AutoCompleteTextView actPlantName;
+    private Button btnSearchPlants;
+    private static RecyclerView mRecyclerView;
+    private static SearchPlantsAdapter mAdapter;
+    private static List<PlantDTO> mPlants;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,17 +36,56 @@ public class SearchPlantsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_plants);
 
         actPlantName = findViewById(R.id.actPlantName);
+        mRecyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.requestFocus();
+        btnSearchPlants = findViewById(R.id.btnSearchPlants);
+        btnSearchPlants.setOnClickListener(this);
 
         mPlantService = new PlantService();
     }
 
+    private void fetchPlants(String keyword) {
+        new FetchAsyncTask().execute(keyword);
+    }
+
     public void searchPlants(View view) throws IOException, JSONException {
 
-        List<PlantDTO> plants = mPlantService.fetchPlants(actPlantName.getText().toString());
-
-        for (PlantDTO plant : plants) {
+        for (PlantDTO plant : mPlants) {
             Toast.makeText(this, plant.toString(), Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (!actPlantName.getText().toString().isEmpty()) {
+            fetchPlants(actPlantName.getText().toString());
+        } else {
+            Toast.makeText(this, "Please enter a plant name!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private static class FetchAsyncTask extends AsyncTask<String, Integer, List<PlantDTO>> {
+
+        @Override
+        protected List<PlantDTO> doInBackground(String... strings) {
+            try {
+
+                mPlants = mPlantService.fetchPlants(strings[0]);
+
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+            return mPlants;
+        }
+
+
+        @Override
+        protected void onPostExecute(List<PlantDTO> plants) {
+            Log.d("RESPONSE", plants.toString());
+            mAdapter = new SearchPlantsAdapter(plants);
+            mRecyclerView.setAdapter(mAdapter);
+        }
     }
 }
