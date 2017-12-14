@@ -45,16 +45,12 @@ public class SearchPlantsActivity extends AppCompatActivity implements View.OnCl
         mPlantService = new PlantService();
     }
 
-    private void fetchPlants(String keyword) {
-        new FetchAsyncTask().execute(keyword);
+    public List<PlantDTO> getPlants() {
+        return mPlants;
     }
 
-    public void searchPlants(View view) throws IOException, JSONException {
-
-        for (PlantDTO plant : mPlants) {
-            Toast.makeText(this, plant.toString(), Toast.LENGTH_LONG).show();
-        }
-
+    public void fetchPlants(String keyword) {
+        new FetchAsyncTask().execute(keyword);
     }
 
     @Override
@@ -79,7 +75,6 @@ public class SearchPlantsActivity extends AppCompatActivity implements View.OnCl
             }
             return mPlants;
         }
-
 
         @Override
         protected void onPostExecute(List<PlantDTO> plants) {
